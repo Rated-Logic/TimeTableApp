@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    
+    <!-- Generate Timetable -->
+    <h2>Generate Timetable</h2>
+    <form action="{{ url_for('generate_timetable') }}" method="POST">
+        <label for="class_name">Class:</label>
+        <input type="text" name="class_name" required>
+        <br>
+        
+        <label for="subject">Subject:</label>
+        <input type="text" name="subject" required>
+        <br>
+        
+        <label for="invigilator">Invigilator:</label>
+        <input type="text" name="invigilator" required>
+        <br>
+        
+        <label for="time">Time:</label>
+        <input type="text" name="time" required>
+        <br>
+        
+        <label for="venue">Venue:</label>
+        <input type="text" name="venue" required>
+        <br>
+        
+        <button type="submit">Generate Timetable</button>
+    </form>
+    
+    <!-- Display Users by Class -->
+    <h2>Registered Users by Class</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Class</th>
+                <th>Users</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for class_info in users_by_class %}
+            <tr>
+                <td>{{ class_info['_id'] }}</td>
+                <td>
+                    <ul>
+                        {% for user in class_info['users'] %}
+                        <li>{{ user['email'] }} (Created At: {{ user['created_at'] }})</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Display Existing Timetable -->
+    <h2>Existing Timetable</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Class</th>
+                <th>Subject</th>
+                <th>Invigilator</th>
+                <th>Time</th>
+                <th>Venue</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in timetable_entries %}
+            <tr>
+                <td>{{ entry.class }}</td>
+                <td>{{ entry.subject }}</td>
+                <td>{{ entry.invigilator }}</td>
+                <td>{{ entry.time }}</td>
+                <td>{{ entry.venue }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

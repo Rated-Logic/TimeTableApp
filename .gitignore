@@ -1,0 +1,34 @@
+# Created by venv; see https://docs.python.org/3/library/venv.html
+# Byte-compiled files
+# Python bytecode files
+__pycache__/
+*.py[cod]
+
+# Environment variables
+.env
+.env.*
+
+# Virtual environment
+venv/
+
+# Log files
+*.log
+
+# Compiled files
+*.so
+
+# Flask specific
+instance/
+config.py
+
+# PyMongo specific
+dump/
+
+# IDE specific
+.vscode/
+.idea/
+
+# OS specific
+.DS_Store
+Thumbs.db
+

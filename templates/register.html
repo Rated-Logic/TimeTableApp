@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+  <div class="wrapper">
+    <form method="POST" action="{{url_for('register')}}">
+      <h2>Register Form</h2>
+      <div class="input-field">
+        <input type="email" id="email" name="email" required>
+        <label>Enter your email</label>
+      </div>
+      <div class="input-field">
+        <input type="password" id="password" name="password" required>
+        <label>Enter your password</label>
+      </div>
+      <div class="dropdown">
+        <label for="user_class"></label>
+        <select id="user_class" name="user_class" required>
+            <option value="" disabled selected hidden></option>
+            <option value="COE">COE</option>
+            <option value=" IT">IT</option>
+            <option value="Industrial Automation">Industrial Automation</option>
+        </select>
+    </div>
+      <button type="submit">Register</button>
+      <div class="register">
+        <p>Already have an account? <a href="{{url_for('login')}}">login</a></p>
+      </div>
+    </form>
+  </div>
+  {% endblock %}

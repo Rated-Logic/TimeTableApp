@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Admin{% endblock %}
+{% block content %} 
+<div class="wrapper">
+    <form method= POST action="{{url_for('admin')}}">
+      <h2>Admin</h2>
+        <div class="input-field">
+        <input type="email" id="email" name="email" required>
+        <label>Enter your email</label>
+      </div>
+      <div class="input-field">
+        <input type="password" id="password" name="password" required>
+        <label>Enter your password</label>
+      </div>
+      <button type="submit">Log In</button>
+      <div class="register">
+        <p>Don't have an account? <a href="{{url_for('adminregister')}}">Register</a></p>
+      </div>
+    </form>
+  </div>
+{% endblock %}
