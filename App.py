@@ -93,17 +93,15 @@ def adminregister():
         return redirect(url_for('admin'))
     return render_template('adminregister.html')
 
-@app.route('/')  # This route will be where users land after successful login
+@app.route('/')  
 def home():
     if 'email' not in session:
         flash('Please log in to view the timetable.')
         return redirect(url_for('login'))
     
     user_email = session['email']
-    user_class = user_model.find_user(user_email).get('class', 'N/A')  # Get the user's class
+    user_class = user_model.find_user(user_email).get('class', 'N/A')  
 
-    # Fetch the timetable for the user's class
-    #timetable_entries = TimetableModel.get_timetable_by_class(user_class)
     return render_template('home.html',user_class=user_class)
 
 @app.route('/logout/')
@@ -120,37 +118,35 @@ def admin_dashboard():
         return redirect(url_for('login'))
 
     if request.method == 'POST' and 'generate_timetable' in request.form:
-        # Get data from form
-        class_name = request.form['class_name'].strip()  # Only a single class is entered now
+       
+        class_name = request.form['class_name'].strip()  
         subjects = request.form['subjects'].split(',')
         venues = request.form['venues'].split(',')
         invigilators = request.form['invigilators'].split(',')
 
-        # Trim whitespace
+        
         subjects = [sub.strip() for sub in subjects]
         venues = [venue.strip() for venue in venues]
         invigilators = [invigilator.strip() for invigilator in invigilators]
 
-        # Ensure the number of subjects, venues, and invigilators match
+       
         if len(subjects) != len(venues) or len(subjects) != len(invigilators):
             flash("Mismatch in the number of subjects, venues, or invigilators. Please check and try again.", "danger")
             return redirect(url_for('admin_dashboard'))
 
-        # Generate timetable
+       
         exam_dates = generate_exam_dates(len(subjects))
         for i, subject in enumerate(subjects):
             timetable_model.add_timetable_entry(
                 class_name=class_name,
                 exam_date=exam_dates[i],
-                venue=venues[i % len(venues)],  # Wrap around if there are more subjects than venues
-                exam_name=subject,
-                invigilator=invigilators[i % len(invigilators)]  # Wrap around if there are more subjects than invigilators
-            )
+                venue=venues[i % len(venues)],  
+                invigilator=invigilators[i % len(invigilators)]  )
+            
 
         flash(f'Timetable generated successfully for {class_name}!', 'success')
         return redirect(url_for('admin_dashboard'))
 
-    # Data for dashboard display
     class_user_counts = user_model.get_all_users_by_class()
     timetable_entries = timetable_model.get_all_timetables()
 
@@ -171,16 +167,16 @@ def delete_timetable(exam_code):
 
 @app.route('/edit_timetable/<string:exam_code>', methods=['POST'])
 def edit_timetable(exam_code):
-    # Debugging: Log form data to ensure it includes all required fields
+   
     print("Form Data:", request.form)
     
-    # Validate form data
+   
     missing_keys = [key for key in ['exam_date', 'venue', 'exam_name', 'invigilator'] if key not in request.form]
     if missing_keys:
         flash(f"Missing fields: {', '.join(missing_keys)}", 'danger')
         return redirect(url_for('admin_dashboard'))
 
-    # Update timetable entry
+    
     updated_data = {
         'exam_date': request.form['exam_date'],
         'venue': request.form['venue'],
@@ -191,7 +187,7 @@ def edit_timetable(exam_code):
     flash('Timetable entry updated successfully!', 'success')
     return redirect(url_for('admin_dashboard'))
 
-# Utility function to generate exam dates dynamically
+
 def generate_exam_dates(count):
     base_date = datetime.now()
     return [(base_date + timedelta(days=i)).strftime('%Y-%m-%d') for i in range(count)]
